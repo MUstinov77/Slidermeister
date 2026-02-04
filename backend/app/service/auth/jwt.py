@@ -14,7 +14,7 @@ settings = get_settings()
 
 class JWTService:
 
-    def __init__(self, settings: Settings):
+    def __init__(self, settings: Settings | None = None):
         self.settings = settings or get_settings()
         self.auth_secret_key = settings.AUTH_SECRET_KEY
         self.algorithm = settings.JWT_ALGORITHM
