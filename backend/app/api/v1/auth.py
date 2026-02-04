@@ -1,7 +1,13 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
+
+from backend.app.models.user import User
+from backend.app.service.user import UserService, get_user_service
+from backend.app.service.auth.jwt import JWTService
+from backend.app.service.auth.hash import Hasher
+from backend.app.schema.auth import JWTResponse
 
 
 DEFAULT_TAG = "auth"
@@ -11,11 +17,22 @@ router = APIRouter(
 )
 
 
-@router.post("/token")
+@router.post(
+    "/login",
+    response_model=JWTResponse
+)
 async def login(
         login_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+        user_service: Annotated[UserService, Depends(get_user_service)],
 ):
-    pass
+    username = login_data.username
+    user = await user_service.retrieve_one(User.username, username)
+    if not user:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    if not Hasher().verify_password(login_data.password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    token = JWTService().create_and_encode_token(user.dict())
+    return {'access_token': token}
 
 
 @router.get("/logout")

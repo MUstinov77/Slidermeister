@@ -4,7 +4,7 @@ from pwdlib import PasswordHash
 
 class Hasher:
 
-    def __init__(self, hasher: PasswordHash):
+    def __init__(self, hasher: PasswordHash | None = None):
         self.hasher = hasher or PasswordHash.recommended()
 
     def verify_password(
