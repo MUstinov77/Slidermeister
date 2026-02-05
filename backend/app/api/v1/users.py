@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 
-
 DEFAULT_TAG = "users"
 
 router = APIRouter(
