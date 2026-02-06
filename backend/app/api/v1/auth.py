@@ -10,7 +10,6 @@ from backend.app.service.auth.hash import Hasher
 from backend.app.service.auth.jwt import JWTService
 from backend.app.service.user import UserService, get_user_service
 
-
 DEFAULT_TAG = "auth"
 
 router = APIRouter(
