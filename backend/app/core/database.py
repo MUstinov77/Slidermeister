@@ -20,8 +20,9 @@ async_session_maker: async_sessionmaker[AsyncSession] | None = None
 async def init_db():
     global async_engine, async_session_maker
 
-    if async_engine is not None:
+    if async_engine:
         print("Database already initialized")
+        return
 
     async_engine = create_async_engine(settings.DB_URI)
     async_session_maker = async_sessionmaker(
@@ -30,11 +31,11 @@ async def init_db():
     )
 
 async def destroy_db():
-    global async_engine, async_session_maker
+    global async_engine
 
-    if async_engine and async_session_maker:
+    if async_engine:
         await async_engine.dispose()
-        async_engine, async_session_maker = None, None
+        async_engine = None
 
 
 async def get_async_session():
