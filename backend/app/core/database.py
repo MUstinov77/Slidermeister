@@ -41,7 +41,7 @@ async def get_async_session():
     if not async_session_maker:
         raise RuntimeError("Session maker is not initialized")
 
-    with async_session_maker() as session:
+    async with async_session_maker() as session:
         try:
             yield session
             await session.commit()
