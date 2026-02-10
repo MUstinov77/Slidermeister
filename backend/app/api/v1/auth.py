@@ -45,7 +45,7 @@ async def login(
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     if not Hasher().verify_password(login_data.password, user.hashed_password):
         raise HTTPException(status_code=400, detail="Incorrect username or password")
-    token = JWTService().create_and_encode_token(user.dict())
+    token = JWTService().create_and_encode_token({"username": user.username})
     return {'access_token': token}
 
 

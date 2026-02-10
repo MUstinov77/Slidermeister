@@ -9,17 +9,17 @@ from jwt.exceptions import (
 
 from backend.app.core.config import Settings, get_settings
 
-settings = get_settings()
+# settings = get_settings()
 
 
 class JWTService:
 
-    def __init__(self, settings: Settings | None = None):
+    def __init__(self, settings: Settings = None):
         self.settings = settings or get_settings()
-        self.auth_secret_key = settings.AUTH_SECRET_KEY
-        self.algorithm = settings.JWT_ALGORITHM
-        self.token_expire = settings.TOKEN_EXPIRE
-        self.jwt_issuer = settings.JWT_ISSUER
+        self.auth_secret_key = self.settings.AUTH_SECRET_KEY
+        self.algorithm = self.settings.JWT_ALGORITHM
+        self.token_expire = self.settings.TOKEN_EXPIRE_DAYS
+        self.jwt_issuer = self.settings.JWT_ISSUER
 
 
     def create_and_encode_token(self, user: dict):
